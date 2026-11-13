@@ -1,0 +1,142 @@
+@import "tailwindcss";
+
+/* ───────────────────────── Design tokens ───────────────────────── */
+@theme {
+  --color-ink: #090909;
+  --color-charcoal: #141414;
+  --color-graphite: #1d1d1d;
+  --color-paper: #ffffff;
+  --color-mist: #f7f7f7;
+  --color-fog: #f1f2f4;
+  --color-line: #e7e7e7;
+  --color-muted: #777777;
+  --color-subtle: #a3a3a3;
+  --color-electric: #0866f9;
+  --color-bright: #1769ff;
+  --color-sky: #6aa3ff;
+  --color-ice: #e8f0ff;
+  --color-success: #12a150;
+  --color-warning: #c27c0e;
+  --color-danger: #d93a3a;
+
+  --font-sans: var(--font-geist), "Inter", "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", monospace;
+
+  --radius-card: 1.25rem;
+  --radius-panel: 1.75rem;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  --shadow-tile: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 18px 40px -18px rgba(0, 18, 64, 0.55);
+  --shadow-soft: 0 24px 60px -32px rgba(9, 9, 9, 0.35);
+}
+
+/* ───────────────────────── Base ───────────────────────── */
+@layer base {
+  html {
+    background: var(--color-charcoal);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  /* Native scrollbar hidden on fine pointers only — the custom one replaces it there.
+     Keyboard, wheel and touch scrolling remain native. */
+  @media (pointer: fine) {
+    html.has-custom-scrollbar { scrollbar-width: none; }
+    html.has-custom-scrollbar::-webkit-scrollbar { display: none; }
+  }
+  body {
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    background: var(--color-charcoal);
+    overflow-x: hidden;
+  }
+  ::selection { background: var(--color-electric); color: white; }
+  :focus-visible {
+    outline: 2px solid var(--color-bright);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  button { cursor: pointer; }
+  button:disabled { cursor: not-allowed; }
+  input, select, textarea { font: inherit; }
+}
+
+/* Lenis recommended CSS */
+html.lenis, html.lenis body { height: auto; }
+.lenis:not(.lenis-autoToggle).lenis-stopped { overflow: clip; }
+.lenis [data-lenis-prevent], .lenis [data-lenis-prevent-wheel] { overscroll-behavior: contain; }
+.lenis.lenis-smooth iframe { pointer-events: none; }
+
+/* ───────────────────────── Utilities ───────────────────────── */
+@utility container-site {
+  width: 100%;
+  margin-inline: auto;
+  max-width: 1280px;
+  padding-inline: clamp(1.25rem, 5.5vw, 5rem);
+}
+
+@utility text-display {
+  font-size: clamp(2.65rem, 5.1vw, 5.6rem);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  font-weight: 500;
+}
+
+@utility text-h2 {
+  font-size: clamp(2rem, 3.6vw, 3.4rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  font-weight: 500;
+}
+
+@utility text-h3 {
+  font-size: clamp(1.35rem, 1.7vw, 1.6rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+}
+
+@utility glass {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04));
+  backdrop-filter: blur(3px) saturate(115%);
+  -webkit-backdrop-filter: blur(3px) saturate(115%);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+/* Masked line wrapper for headline reveals */
+.line-mask { display: block; overflow: hidden; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+.line-mask > span { display: block; will-change: transform; }
+
+/* Elements animated by GSAP start hidden only when JS + motion are available.
+   `.js-motion` is added on <html> by the motion provider. Without it everything is visible. */
+.js-motion [data-reveal] { opacity: 0; }
+
+/* Syntax highlighting tokens (developer section) */
+.tok-key { color: #8fb8ff; }
+.tok-str { color: #9fe0b0; }
+.tok-num { color: #ffcf8a; }
+.tok-com { color: #6b7280; font-style: italic; }
+.tok-kw { color: #c9a7ff; }
+.tok-fn { color: #6fd3ff; }
+
+/* Custom cursor */
+.cursor-root { position: fixed; inset: 0; pointer-events: none; z-index: 120; }
+@media (pointer: coarse) { .cursor-root { display: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .js-motion [data-reveal] { opacity: 1 !important; }
+}
