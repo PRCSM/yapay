@@ -1,5 +1,5 @@
-export function cn(...parts: Array<string | false | null | undefined>) {
-  return parts.filter(Boolean).join(" ");
+export function cn(...parts: unknown[]) {
+  return parts.filter((p): p is string => typeof p === "string" && p.length > 0).join(" ");
 }
 
 export function formatCurrency(value: number, currency = "USD", maxFraction = 2) {
